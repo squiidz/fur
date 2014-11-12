@@ -49,15 +49,20 @@ func (s *Server) Start() {
 // Add function with the right sigature to the Server Mux
 // and chain the provided middlewares on it.
 func (s *Server) AddRoute(pat string, f func(rw http.ResponseWriter, req *http.Request), middles ...MiddleWare) {
-	var stack http.Handler
-	for i := len(middles) - 1; i >= 0; i-- {
-		if i == len(middles)-1 {
-			stack = middles[i](http.HandlerFunc(f))
-		} else {
-			stack = middles[i](stack)
+	if middles != nil {
+		var stack http.Handler
+		for i := len(middles) - 1; i >= 0; i-- {
+			if i == len(middles)-1 {
+				stack = middles[i](http.HandlerFunc(f))
+			} else {
+				stack = middles[i](stack)
+			}
 		}
+		s.Mux.Handle(pat, stack)
+	} else {
+		s.Mux.Handle(pat, http.HandlerFunc(f))
 	}
-	s.Mux.Handle(pat, stack)
+
 }
 
 // Log request received by the Server.
