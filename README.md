@@ -1,7 +1,7 @@
 furServ
 =======
 
-### Example
+## Example
 ``` 
 	package main
 	
@@ -17,14 +17,23 @@ furServ
 	}
 ```
 
-### Middleware and Options
+## Middleware and Options
 - Every function who have ``` func (next http.Handler) http.Handler ``` can be pass as a MiddleWare.
 - Option siganture is ``` func (s *Server) *Server ``` every function with this one, can be pass as a Option.
 
-### Next Feature
+## Next Feature
 - Easy static files serving instead of 
 ``` http.Handle("/root/", http.stripPrefix("/root/", http.FileServer(http.Dir("folder")))) ```
 - Add General Middleware function too MiddleWare type. (The Middleware become activated on every handler by default)
 
-### License
+## Contributing
+
+   1- Fork it
+   2- Create your feature branch (git checkout -b my-new-feature)
+   3- Write Tests!
+   4- Commit your changes (git commit -am 'Add some feature')
+   5- Push to the branch (git push origin my-new-feature)
+   6- Create new Pull Request
+
+## License
 MIT
