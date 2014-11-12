@@ -65,7 +65,7 @@ func (s *Server) AddRoute(pat string, f func(rw http.ResponseWriter, req *http.R
 
 }
 
-// Log request received by the Server.
+// Log request to the Server.
 func (s *Server) logger(mux http.Handler) http.Handler {
 	return http.HandlerFunc(func(rw http.ResponseWriter, req *http.Request) {
 		log.Printf("%s %s %s", req.RemoteAddr, req.Method, req.URL)
