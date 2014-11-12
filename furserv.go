@@ -13,6 +13,7 @@ import (
 	"net/http"
 )
 
+// Simple Server structure for a web server.
 type Server struct {
 	Host string
 	Port string
@@ -21,6 +22,10 @@ type Server struct {
 }
 
 // Create a NewServer instance with the given value.
+// Host: "localhost"
+// Port: ":8080"
+// Log: true/false
+// Options: functions to run on the server instance who's gonna be return.
 func NewServer(host string, port string, log bool, options ...func(s *Server)) *Server {
 	svr := Server{host, port, log, http.NewServeMux()}
 	for _, option := range options {
@@ -30,6 +35,7 @@ func NewServer(host string, port string, log bool, options ...func(s *Server)) *
 }
 
 // Start Listening on host and port of the Server.
+// Log the request if the log was initiated as true in NewServer.
 func (s *Server) Start() {
 	fmt.Printf("[+] Server Running on %s ... \n", s.Port)
 	if s.Log {
@@ -38,7 +44,8 @@ func (s *Server) Start() {
 	http.ListenAndServe(s.Host+s.Port, s.Mux)
 }
 
-// Add Handler with the right sigature to the Server Mux.
+// Add function with the right sigature to the Server Mux
+// and chain the provided middlewares on it.
 func (s *Server) AddHandler(pat string, f func(rw http.ResponseWriter, req *http.Request), middles ...func(next http.Handler) http.Handler) {
 	var stack http.Handler
 	for i := len(middles) - 1; i >= 0; i-- {
