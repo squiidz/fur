@@ -1,9 +1,15 @@
 furServ
 =======
 
-### Simple way of making Go web server with middleware chaining.
+## Simple way Go web server with middleware chaining.
+
+### Example
 ``` 
-	server := furserv.NewServer("localhost", ":8080", true)
+	package main
+	
+	import "github.com/squiidz/furserv"
+	
+	server := furserv.NewServer("localhost", ":8080", true, option1, option2)
 
 	server.AddRoute("/home", HomeHandler, Middleware1, MiddleWare2, Middleware3)
 	server.AddRoute("/", DefaultHandler)
@@ -11,3 +17,6 @@ furServ
 	server.Start()
 
 ```
+
+### License
+MIT
