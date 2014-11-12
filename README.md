@@ -18,6 +18,11 @@ furServ
 	    server.Start()
 	}
 ```
+
+### Middleware and Options
+Every function who have ``` func (next http.Handler) http.Handler ``` can be pass as a MiddleWare.
+Option need ``` func (s *Server) *Server ``` can be pass as a Options.
+
 ### Next Feature
 - Easy static files serving instead of 
 ``` http.Handle("/root/", http.stripPrefix("/root/", http.FileServer(http.Dir("folder")))) ```
