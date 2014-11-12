@@ -22,5 +22,6 @@ furServ
 - Easy static files serving instead of 
 ``` http.Handle("/root/", http.stripPrefix("/root/", http.FileServer(http.Dir("folder")))) ```
 - Add General Middleware function too MiddleWare type. (The Middleware become activated on every handler by default)
+
 ### License
 MIT
