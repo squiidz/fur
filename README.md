@@ -1,8 +1,6 @@
 furServ
 =======
 
-## Simple way Go web server with Middleware chaining.
-
 ### Example
 ``` 
 	package main
