@@ -20,8 +20,8 @@ furServ
 ```
 
 ### Middleware and Options
-Every function who have ``` func (next http.Handler) http.Handler ``` can be pass as a MiddleWare.
-Option need ``` func (s *Server) *Server ``` can be pass as a Options.
+- Every function who have ``` func (next http.Handler) http.Handler ``` can be pass as a MiddleWare.
+- Option siganture is ``` func (s *Server) *Server ``` every function with this one, can be pass as a Option.
 
 ### Next Feature
 - Easy static files serving instead of 
