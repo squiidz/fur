@@ -20,9 +20,10 @@ fur
 	}
 ```
 
-## Middleware and Options
-- Every function who have ``` func (next http.Handler) http.Handler ``` can be pass as a MiddleWare.
-- Option siganture is ``` func (s *fur.Server) *fur.Server ``` every function with this one, can be pass as a Option.
+## Middlewares and Options
+- Every function who have ` func (next http.Handler) http.Handler ` can be pass as a MiddleWare.
+
+- Option siganture is ` func (s *fur.Server) *fur.Server ` every function with this one, can be pass as a Option.
 
 ## Next Feature
 - Context Variables
@@ -31,12 +32,12 @@ fur
 
 ## Contributing
 
-    1- Fork it
-    2- Create your feature branch (git checkout -b my-new-feature)
-    3- Write Tests!
-    4- Commit your changes (git commit -am 'Add some feature')
-    5- Push to the branch (git push origin my-new-feature)
-    6- Create new Pull Request
+1. Fork it
+2. Create your feature branch (git checkout -b my-new-feature)
+3. Write Tests!
+4. Commit your changes (git commit -am 'Add some feature')
+5. Push to the branch (git push origin my-new-feature)
+6. Create new Pull Request
 
 ## License
 MIT
