@@ -62,7 +62,7 @@ func (s *Server) Start() {
 
 // Add function with the right sigature to the Server Mux
 // and chain the provided middlewares on it.
-func (s *Server) AddRoute(pat string, f func(rw http.ResponseWriter, req *http.Request), middles ...MiddleWare) {
+func (s *Server) AddRoute(path string, f func(rw http.ResponseWriter, req *http.Request), middles ...MiddleWare) {
 	var stack http.Handler
 	var midStack = origin
 
@@ -73,10 +73,10 @@ func (s *Server) AddRoute(pat string, f func(rw http.ResponseWriter, req *http.R
 		stack = midStack[0](http.HandlerFunc(f))
 		stack = wrap(stack, midStack[1:])
 
-		s.Mux.Handle(pat, stack)
+		s.Mux.Handle(path, stack)
 
 	} else {
-		s.Mux.Handle(pat, http.HandlerFunc(f))
+		s.Mux.Handle(path, http.HandlerFunc(f))
 	}
 }
 
