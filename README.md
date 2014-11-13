@@ -25,8 +25,8 @@ fur
 - Option siganture is ``` func (s *fur.Server) *fur.Server ``` every function with this one, can be pass as a Option.
 
 ## Next Feature
-- Easy static files serving instead of 
-``` http.Handle("/root/", http.stripPrefix("/root/", http.FileServer(http.Dir("folder")))) ```
+- Context Variables
+- Shortway static files serving [DONE] 
 - Add Global Middleware [DONE]
 
 ## Contributing
