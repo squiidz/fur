@@ -3,9 +3,18 @@ fur
 
 ## What is fur ?
 
-fur is just a very simple web server api, to make things a little bit less
-repetetive. No revolution in this package, just a simple way to build your 
-Web application basics faster.
+fur is just a very simple web server api, to make things less repetetive.
+No revolution of any kind in this package, just a simple way to build your 
+Web application basics. fur have not the goal to be a framework at all !
+It is more in a way of toolkit (e.g Gorilla). 
+
+## What it does ..?
+
+- Middleware Chaining.
+- Global Middleware declaration.
+- Shorter version, for static files serving.
+- Server instance as a Struct.
+- Chaining Options on the Server at Creation.
 
 ![alt tag](http://upload.wikimedia.org/wikipedia/commons/8/8c/Marmota.jpg)
 
@@ -37,6 +46,7 @@ Web application basics faster.
 - Context Variables
 - Shortway static files serving [DONE] 
 - Add Global Middleware [DONE]
+- Some others gonna be implemented with the time.
 
 ## Contributing
 
