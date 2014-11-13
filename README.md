@@ -1,7 +1,8 @@
 fur
 =======
 
-What is fur ?
+## What is fur ?
+
 fur is just a very simple web server api, to make things a little bit less
 repetetive. No revolution in this package, just a simple way to build your 
 Web application basics faster.
