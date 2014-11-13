@@ -62,13 +62,7 @@ func (s *Server) Start() {
 // and chain the provided middlewares on it.
 func (s *Server) AddRoute(pat string, f func(rw http.ResponseWriter, req *http.Request), middles ...MiddleWare) {
 	var stack http.Handler
-	var midStack []MiddleWare
-
-	if origin != nil {
-		for _, or := range origin {
-			midStack = append(midStack, or)
-		}
-	}
+	var midStack = origin
 
 	if middles != nil {
 		for _, mid := range middles {
