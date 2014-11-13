@@ -10,8 +10,10 @@ fur
 	func main() {
 	    server := fur.NewServer("localhost", ":8080", true, option1, option2)
 
-	    server.AddRoute("/home", Middleware1, Middleware2, Middleware3, HomeHandler)
-	    server.AddRoute("/", DefaultHandler)
+	    server.Stack(GlobalMiddleWare)
+
+	    server.AddRoute("/home", HomeHandler, Middleware1, Middleware2)
+	    server.AddRoute("/", DefaultHandler, MiddleWare3)
 
 	    server.Start()
 	}
@@ -19,12 +21,12 @@ fur
 
 ## Middleware and Options
 - Every function who have ``` func (next http.Handler) http.Handler ``` can be pass as a MiddleWare.
-- Option siganture is ``` func (s *Server) *Server ``` every function with this one, can be pass as a Option.
+- Option siganture is ``` func (s *fur.Server) *fur.Server ``` every function with this one, can be pass as a Option.
 
 ## Next Feature
 - Easy static files serving instead of 
 ``` http.Handle("/root/", http.stripPrefix("/root/", http.FileServer(http.Dir("folder")))) ```
-- Add General Middleware function too MiddleWare type. (The Middleware become activated on every handler by default)
+- Add Global Middleware [DONE]
 
 ## Contributing
 
