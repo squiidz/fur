@@ -66,22 +66,18 @@ func (s *Server) AddRoute(pat string, f func(rw http.ResponseWriter, req *http.R
 	var stack http.Handler
 	var midStack = origin
 
-	if middles != nil {
+	if middles != nil || midStack != nil {
 		for _, mid := range middles {
 			midStack = append(midStack, mid)
 		}
-	}
-
-	if midStack != nil {
-
 		stack = midStack[0](http.HandlerFunc(f))
 		stack = wrap(stack, midStack[1:])
 
 		s.Mux.Handle(pat, stack)
+
 	} else {
 		s.Mux.Handle(pat, http.HandlerFunc(f))
 	}
-
 }
 
 // Temporary way for serving static files
@@ -97,6 +93,7 @@ func (s *Server) logger(mux http.Handler) http.Handler {
 	})
 }
 
+// Only Wrap the middleware on the provided http.Handler
 func wrap(stack http.Handler, middles []MiddleWare) http.Handler {
 	for i := len(middles) - 1; i >= 0; i-- {
 		stack = middles[i](stack)
