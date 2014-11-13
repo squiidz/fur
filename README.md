@@ -1,6 +1,8 @@
 fur
 =======
 
+![alt tag](http://upload.wikimedia.org/wikipedia/commons/8/8c/Marmota.jpg)
+
 ## Example
 ``` 
 	package main
