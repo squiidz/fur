@@ -1,6 +1,11 @@
 fur
 =======
 
+What is fur ?
+fur is just a very simple web server api, to make things a little bit less
+repetetive. No revolution in this package, just a simple way to build your 
+Web application basics faster.
+
 ![alt tag](http://upload.wikimedia.org/wikipedia/commons/8/8c/Marmota.jpg)
 
 ## Example
