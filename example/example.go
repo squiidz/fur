@@ -11,11 +11,12 @@ func main() {
 	s := fur.NewServer("localhost", ":8080", false)
 
 	// Set some default middleware for all the handlers
-	s.Stack(MiddleRedirect)
+	s.Stack(MiddleLog)
 
 	// Add a new routes and add some middleware for this one only
-	s.AddRoute("/nuts", DefaultHandler, MiddleLog)
-	s.AddRoute("/", nil)
+	s.AddRoute("/nuts", DefaultHandler)
+	s.AddRoute("/", DefaultHandler, MiddleRedirect)
+	s.AddStatic("/public/", ".")
 
 	// Start the server
 	s.Start()

@@ -36,8 +36,10 @@ type Origin []MiddleWare
 // Options: functions to run on the server instance who's gonna be return.
 func NewServer(host string, port string, log bool, options ...func(s *Server)) *Server {
 	svr := Server{host, port, log, http.NewServeMux()}
-	for _, option := range options {
-		option(&svr)
+	if options != nil {
+		for _, option := range options {
+			option(&svr)
+		}
 	}
 	return &svr
 }
@@ -80,6 +82,11 @@ func (s *Server) AddRoute(pat string, f func(rw http.ResponseWriter, req *http.R
 		s.Mux.Handle(pat, http.HandlerFunc(f))
 	}
 
+}
+
+// Temporary way for serving static files
+func (s *Server) AddStatic(path string, dir string) {
+	s.Mux.Handle(path, http.StripPrefix(path, http.FileServer(http.Dir(dir))))
 }
 
 // Log request to the Server.
