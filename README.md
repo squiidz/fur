@@ -1,14 +1,14 @@
-furServ
+fur
 =======
 
 ## Example
 ``` 
 	package main
 	
-	import "github.com/squiidz/furserv"
+	import "github.com/squiidz/fur"
 	
 	func main() {
-	    server := furserv.NewServer("localhost", ":8080", true, option1, option2)
+	    server := fur.NewServer("localhost", ":8080", true, option1, option2)
 
 	    server.AddRoute("/home", HomeHandler, Middleware1, Middleware2, Middleware3)
 	    server.AddRoute("/", DefaultHandler)
