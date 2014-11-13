@@ -14,7 +14,7 @@ fur
 
 	    server.Stack(GlobalMiddleWare)
 
-	    server.AddStatic("/public/", ".")
+	    server.AddStatic("/public/", "../public")
 	    server.AddRoute("/home", HomeHandler, Middleware1, Middleware2)
 	    server.AddRoute("/", DefaultHandler, MiddleWare3)
 
