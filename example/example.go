@@ -22,14 +22,17 @@ func main() {
 
 // Application Handler
 func DefaultHandler(rw http.ResponseWriter, req *http.Request) {
-	
-	rw.Write([]byte()
+	// Short Retrive Context way
+	value := fur.FindContext(req).Get("MyKey")
+	rw.Write([]byte(value.(string))
 }
 
 // Middleware Logger
 func MiddleLog(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(rw http.ResponseWriter, req *http.Request) {
-		fur.Set(req, "api", "123456789")
+		// Short Context way
+		fur.NewContext(req).Set("MyKey", "MyValue")
+
 		log.Printf("[%s] %s %s", req.Method, req.RequestURI, req.RemoteAddr)
 		next.ServeHTTP(rw, req)
 	})

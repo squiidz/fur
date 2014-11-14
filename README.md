@@ -15,7 +15,7 @@ It is more in a way of toolkit (e.g Gorilla).
 - Shorter version, for static files serving.
 - Server instance as a Struct.
 - Chaining Options on the Server at Creation.
-- Simple Context Variables
+- Simple Context Struct
 
 ![alt tag](http://upload.wikimedia.org/wikipedia/commons/8/8c/Marmota.jpg)
 
@@ -42,6 +42,15 @@ It is more in a way of toolkit (e.g Gorilla).
 - Every function who have ` func (next http.Handler) http.Handler ` can be pass as a MiddleWare.
 
 - Option siganture is ` func (s *fur.Server) ` every function with this one, can be pass as a Option.
+
+## Context
+
+- Create a New Context with ``` cont := fur.NewContext(req) ```
+- Set some Key/Value ``` cont.Set("key", "value") ```
+- Find the already created context ``` cont := fur.FindContext(req) ```
+- Retrive the key ``` cont.Get("key") ``` 
+
+- Check the example if you need a using case.
 
 ## Next Feature
 - Context Variables [50%]

@@ -1,3 +1,10 @@
+/********************************
+*** Web server API for Go     ***
+*** Code is under MIT license ***
+*** Code by CodingFerret      ***
+*** github.com/squiidz        ***
+*********************************/
+
 package fur
 
 import (
