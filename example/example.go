@@ -12,24 +12,23 @@ func main() {
 
 	// Set some default middleware for all the handlers
 	s.Stack(MiddleLog)
-
 	// Add a new routes and add some middleware for this one only
 	s.AddRoute("/nuts", DefaultHandler)
 	s.AddRoute("/", DefaultHandler, MiddleRedirect)
 	s.AddStatic("/public/", ".")
-
 	// Start the server
 	s.Start()
 }
 
 // Application Handler
 func DefaultHandler(rw http.ResponseWriter, req *http.Request) {
-	rw.Write([]byte("Welcome to my website"))
+	rw.Write([]byte(fur.Get(req, "api").(string)))
 }
 
 // Middleware Logger
 func MiddleLog(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(rw http.ResponseWriter, req *http.Request) {
+		fur.Set(req, "api", "123456789")
 		log.Printf("[%s] %s %s", req.Method, req.RequestURI, req.RemoteAddr)
 		next.ServeHTTP(rw, req)
 	})
