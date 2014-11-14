@@ -15,6 +15,7 @@ It is more in a way of toolkit (e.g Gorilla).
 - Shorter version, for static files serving.
 - Server instance as a Struct.
 - Chaining Options on the Server at Creation.
+- Simple Context Variables
 
 ![alt tag](http://upload.wikimedia.org/wikipedia/commons/8/8c/Marmota.jpg)
 
@@ -43,7 +44,7 @@ It is more in a way of toolkit (e.g Gorilla).
 - Option siganture is ` func (s *fur.Server) *fur.Server ` every function with this one, can be pass as a Option.
 
 ## Next Feature
-- Context Variables
+- Context Variables [50%]
 - Shortway static files serving [DONE] 
 - Add Global Middleware [DONE]
 - Some others gonna be implemented with the time.
