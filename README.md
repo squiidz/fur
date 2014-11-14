@@ -50,7 +50,7 @@ It is more in a way of toolkit (e.g Gorilla).
 - Find the already created context ``` cont := fur.FindContext(req) ```
 - Retrive the key ``` cont.Get("key") ``` 
 
-- Check the example if you need a using case.
+- Check the example folder if you need a using case.
 
 ## Next Feature
 - Context Variables [50%]
