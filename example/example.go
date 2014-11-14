@@ -10,12 +10,14 @@ func main() {
 	// Create a NewServer
 	s := fur.NewServer("localhost", ":8080", false)
 
-	// Set some default middleware for all the handlers
+	// Set some default middleware for all Route
 	s.Stack(MiddleLog)
+
 	// Add a new routes and add some middleware for this one only
 	s.AddRoute("/nuts", DefaultHandler)
 	s.AddRoute("/", DefaultHandler, MiddleRedirect)
-	s.AddStatic("/public/", ".")
+	s.AddStatic("/public/", "my/assets/folder/")
+	
 	// Start the server
 	s.Start()
 }
@@ -24,6 +26,7 @@ func main() {
 func DefaultHandler(rw http.ResponseWriter, req *http.Request) {
 	// Short Retrive Context way
 	value := fur.FindContext(req).Get("MyKey")
+	
 	rw.Write([]byte(value.(string))
 }
 
@@ -42,7 +45,7 @@ func MiddleLog(next http.Handler) http.Handler {
 func MiddleRedirect(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(rw http.ResponseWriter, req *http.Request) {
 		if req.RequestURI != "/nuts" {
-			http.Redirect(rw, req, "http://google.com", http.StatusFound)
+			http.Redirect(rw, req, "/nuts", http.StatusFound)
 		} else {
 			next.ServeHTTP(rw, req)
 		}
