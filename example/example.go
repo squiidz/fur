@@ -22,7 +22,8 @@ func main() {
 
 // Application Handler
 func DefaultHandler(rw http.ResponseWriter, req *http.Request) {
-	rw.Write([]byte(fur.Get(req, "api").(string)))
+	
+	rw.Write([]byte()
 }
 
 // Middleware Logger

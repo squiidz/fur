@@ -41,13 +41,12 @@ It is more in a way of toolkit (e.g Gorilla).
 ## Middlewares and Options
 - Every function who have ` func (next http.Handler) http.Handler ` can be pass as a MiddleWare.
 
-- Option siganture is ` func (s *fur.Server) *fur.Server ` every function with this one, can be pass as a Option.
+- Option siganture is ` func (s *fur.Server) ` every function with this one, can be pass as a Option.
 
 ## Next Feature
 - Context Variables [50%]
 - Shortway static files serving [DONE] 
 - Add Global Middleware [DONE]
-- Some others gonna be implemented with the time.
 
 ## Contributing
 
