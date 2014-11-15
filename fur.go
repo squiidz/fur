@@ -44,6 +44,7 @@ func NewServer(host string, port string, log bool, options ...func(s *Server)) *
 	return &svr
 }
 
+// Add Global Middleware to origin
 func (s *Server) Stack(middles ...MiddleWare) {
 	for _, middle := range middles {
 		origin = append(origin, middle)
