@@ -19,10 +19,11 @@ var (
 
 // Simple Server structure for a web server.
 type Server struct {
-	Host string
-	Port string
-	Log  bool
-	Mux  *http.ServeMux
+	Host   string
+	Port   string
+	Log    bool
+	Mux    *http.ServeMux
+	Routes []*Route
 }
 
 type MiddleWare func(http.Handler) http.Handler
@@ -35,7 +36,7 @@ type Origin []MiddleWare
 // Log: true/false
 // Options: functions to run on the server instance who's gonna be return.
 func NewServer(host string, port string, log bool, options ...func(s *Server)) *Server {
-	svr := Server{host, port, log, http.NewServeMux()}
+	svr := Server{host, port, log, http.NewServeMux(), []*Route{}}
 	if options != nil {
 		for _, option := range options {
 			option(&svr)
@@ -55,6 +56,11 @@ func (s *Server) Stack(middles ...MiddleWare) {
 // Log the request if the log was initiated as true in NewServer.
 func (s *Server) Start() {
 	fmt.Printf("[+] Server Running on %s ... \n", s.Port)
+	if s.Routes != nil {
+		for _, r := range s.Routes {
+			s.Mux.Handle(r.Path, r)
+		}
+	}
 	if s.Log {
 		http.ListenAndServe(s.Host+s.Port, s.logger(s.Mux))
 	}
@@ -63,7 +69,7 @@ func (s *Server) Start() {
 
 // Add function with the right sigature to the Server Mux
 // and chain the provided middlewares on it.
-func (s *Server) AddRoute(path string, f func(rw http.ResponseWriter, req *http.Request), middles ...MiddleWare) {
+func (s *Server) AddRoute(path string, f func(rw http.ResponseWriter, req *http.Request), middles ...MiddleWare) *Route {
 	var stack http.Handler
 	var midStack = origin
 
@@ -73,12 +79,13 @@ func (s *Server) AddRoute(path string, f func(rw http.ResponseWriter, req *http.
 		}
 		stack = midStack[0](http.HandlerFunc(f))
 		stack = wrap(stack, midStack[1:])
-
-		s.Mux.Handle(path, stack)
-
 	} else {
-		s.Mux.Handle(path, http.HandlerFunc(f))
+		stack = http.HandlerFunc(f)
 	}
+
+	r := Route{path, stack, ""}
+	s.Routes = append(s.Routes, &r)
+	return &r
 }
 
 // Temporary way for serving static files

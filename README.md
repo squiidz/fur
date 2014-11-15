@@ -14,6 +14,7 @@ It is more of a toolkit (e.g [Gorilla](https://github.com/gorilla/mux)).
 - Global Middleware declaration.
 - Shorter version, for static file serving.
 - Server instance as a Struct.
+- Force a HTTP method on a route.
 - Chaining Options on the Server at Creation.
 - Simple Context Struct
 
@@ -31,8 +32,10 @@ func main() {
 	server.Stack(GlobalMiddleWare)
 
 	server.AddStatic("/public/", "../public")
+	
 	server.AddRoute("/home", HomeHandler, Middleware1, Middleware2)
-	server.AddRoute("/", DefaultHandler, MiddleWare3)
+	server.AddRoute("/", DefaultHandler, MiddleWare3).Get()
+	server.AddRoute("/data", DataHandler).Post()
 
 	server.Start()
 }
@@ -54,9 +57,11 @@ Every function that has the signature ` func (s *fur.Server) ` can be passed as 
 - Check the example folder if you want to see it in action.
 
 ## Next features
-- Context Variables [50%]
+- Context Variables [75%]
 - Shortway static files serving [DONE] 
 - Add Global Middleware [DONE]
+- Force HTTP method on Route [DONE]
+- Add Multiple HTTP Method on one Route
 
 ## Contributing
 

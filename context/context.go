@@ -32,8 +32,12 @@ func NewContext(req *http.Request) *Context {
 
 // Retrive a context from the memo map and return.
 func FindContext(req *http.Request) *Context {
-	con := memo[req]
-	return &con
+	c := memo[req]
+	if c.req != nil {
+		con := memo[req]
+		return &con
+	}
+	return nil
 }
 
 // Set a new key value pair in the context.Vars

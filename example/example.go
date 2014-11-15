@@ -16,7 +16,8 @@ func main() {
 	s.Stack(MiddleLog)
 
 	// Add a new routes and add some middleware for this one only
-	s.AddRoute("/nuts", DefaultHandler)
+	// You can force a HTTP method (.Get(), .Post(), .Put(), .Delete())
+	s.AddRoute("/nuts", DefaultHandler).Get()
 	s.AddRoute("/", DefaultHandler, MiddleRedirect)
 	s.AddStatic("/public/", "my/assets/folder/")
 	

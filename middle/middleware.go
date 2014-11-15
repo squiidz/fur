@@ -1,8 +1,16 @@
+/********************************
+*** Web server API for Go     ***
+*** Code is under MIT license ***
+*** Code by CodingFerret      ***
+*** github.com/squiidz        ***
+*********************************/
+
 package middle
 
 import (
 	"log"
 	"net/http"
+	"runtime/debug"
 )
 
 // Very simple Console Logger
@@ -13,13 +21,17 @@ func SimpleLog(next http.Handler) http.Handler {
 	})
 }
 
-// Check for a specific method
-func CheckMethod(next http.Handler, m string) http.Handler {
+// Recovery Middleware
+func Recovery(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(rw http.ResponseWriter, req *http.Request) {
-		if req.Method == m {
-			next.ServeHTTP(rw, req)
-		} else {
-			http.Redirect(rw, req, "/", http.StatusBadRequest)
-		}
+		defer func() {
+			if err := recover(); err != nil {
+				rw.WriteHeader(http.StatusInternalServerError)
+				stack := debug.Stack()
+				log.Printf("PANIC: %s\n%s", err, stack)
+
+			}
+		}()
+		next.ServeHTTP(rw, req)
 	})
 }
