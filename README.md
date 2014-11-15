@@ -3,16 +3,16 @@ fur
 
 ## What is fur ?
 
-fur is just a simple web server api, to make things less repetetive.
+fur is just a simple web server api, to make things less repetitive.
 No revolution of any kind in this package, just a simple way to build your 
-Web application basics. fur have not the goal to be a framework at all !
-It is more in a way of toolkit (e.g Gorilla). 
+Web application basics. fur isn't trying to be a framework at all!
+It is more of a toolkit (e.g [Gorilla](https://github.com/gorilla/mux)). 
 
-## What it does ..?
+## Features
 
 - Middleware Chaining.
 - Global Middleware declaration.
-- Shorter version, for static files serving.
+- Shorter version, for static file serving.
 - Server instance as a Struct.
 - Chaining Options on the Server at Creation.
 - Simple Context Struct
@@ -20,28 +20,28 @@ It is more in a way of toolkit (e.g Gorilla).
 ![alt tag](http://upload.wikimedia.org/wikipedia/commons/8/8c/Marmota.jpg)
 
 ## Example
-``` 
-	package main
+```go
+package main
 	
-	import "github.com/squiidz/fur"
+import "github.com/squiidz/fur"
 	
-	func main() {
-	    server := fur.NewServer("localhost", ":8080", true, option1, option2)
+func main() {
+	server := fur.NewServer("localhost", ":8080", true, option1, option2)
 
-	    server.Stack(GlobalMiddleWare)
+	server.Stack(GlobalMiddleWare)
 
-	    server.AddStatic("/public/", "../public")
-	    server.AddRoute("/home", HomeHandler, Middleware1, Middleware2)
-	    server.AddRoute("/", DefaultHandler, MiddleWare3)
+	server.AddStatic("/public/", "../public")
+	server.AddRoute("/home", HomeHandler, Middleware1, Middleware2)
+	server.AddRoute("/", DefaultHandler, MiddleWare3)
 
-	    server.Start()
-	}
+	server.Start()
+}
 ```
 
 ## Middlewares and Options
-- Every function who have ` func (next http.Handler) http.Handler ` can be pass as a MiddleWare.
+Every function that has the signature ` func (next http.Handler) http.Handler ` can be passed as a MiddleWare.
 
-- Option siganture is ` func (s *fur.Server) ` every function with this one, can be pass as a Option.
+Every function that has the signature ` func (s *fur.Server) ` can be passed as a Option.
 
 ## Context
 
@@ -50,9 +50,9 @@ It is more in a way of toolkit (e.g Gorilla).
 - Find the already created context ``` cont := fur.FindContext(req) ```
 - Retrive the key ``` cont.Get("key") ``` 
 
-- Check the example folder if you need a using case.
+- Check the example folder if you want to see it in action.
 
-## Next Feature
+## Next features
 - Context Variables [50%]
 - Shortway static files serving [DONE] 
 - Add Global Middleware [DONE]
