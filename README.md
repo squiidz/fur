@@ -45,9 +45,10 @@ Every function that has the signature ` func (s *fur.Server) ` can be passed as 
 
 ## Context
 
-- Create a New Context with ``` cont := fur.NewContext(req) ```
+- Import ``` github.com/squiidz/fur/context ```
+- Create a New Context with ``` cont := context.NewContext(req) ```
 - Set some Key/Value ``` cont.Set("key", "value") ```
-- Find the already created context ``` cont := fur.FindContext(req) ```
+- Find the already created context ``` cont := context.FindContext(req) ```
 - Retrive the key ``` cont.Get("key") ``` 
 
 - Check the example folder if you want to see it in action.
