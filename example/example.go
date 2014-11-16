@@ -30,7 +30,7 @@ func main() {
 // Application Handler
 func DefaultHandler(rw http.ResponseWriter, req *http.Request) {
 	// Short Retrive Context way
-	value := context.FindContext(req).Get("MyKey")
+	value := context.Find(req).Get("MyKey")
 	
 	rw.Write([]byte(value.(string))
 }
