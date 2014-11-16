@@ -37,9 +37,9 @@ func Recovery(next http.Handler) http.Handler {
 }
 
 // transform Normal handler in middleware
-type Mutater func(rw http.ResponseWriter, req *http.Request)
+type Muta func(rw http.ResponseWriter, req *http.Request)
 
-func Mutate(m Mutater) func(http.Handler) http.Handler {
+func Mutate(m Muta) func(http.Handler) http.Handler {
 	return func(next http.Handler) http.Handler {
 		return http.HandlerFunc(func(rw http.ResponseWriter, req *http.Request) {
 			m(rw, req)
