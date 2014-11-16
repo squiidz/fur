@@ -17,24 +17,9 @@ type Route struct {
 	Method  string
 }
 
-/*
-var (
-	action = []string{"POST", "GET", "PUT", "DELETE"}
-)
-
-func (r *Route) SetMethod(methods ...string) {
-	var valid = []string{}
-	if methods != nil {
-		for _, a := range action {
-			for _, m := range methods {
-				if m == a {
-					valid = append(valid, m)
-				}
-			}
-		}
-	}
+func NewRoute(url string, h http.Handler, m string) *Route {
+	return &Route{url, h, m}
 }
-*/
 
 func (r *Route) Get() {
 	r.Method = "GET"
@@ -53,8 +38,8 @@ func (r *Route) Delete() {
 }
 
 func (r Route) ServeHTTP(rw http.ResponseWriter, req *http.Request) {
+
 	if r.Method != "" {
-		//correct := methodValid(req.Method, r.Method)
 		if req.Method == r.Method {
 			r.handler.ServeHTTP(rw, req)
 		} else {
@@ -63,14 +48,5 @@ func (r Route) ServeHTTP(rw http.ResponseWriter, req *http.Request) {
 	} else {
 		r.handler.ServeHTTP(rw, req)
 	}
-}
 
-/*
-func methodValid(m string, valMe []string) bool {
-	for _, v := range valMe {
-		if m == v {
-			return true
-		}
-	}
 }
-*/

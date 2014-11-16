@@ -83,9 +83,9 @@ func (s *Server) AddRoute(path string, f func(rw http.ResponseWriter, req *http.
 		stack = http.HandlerFunc(f)
 	}
 
-	r := Route{path, stack, ""}
-	s.routes = append(s.routes, &r)
-	return &r
+	r := NewRoute(path, stack, "")
+	s.routes = append(s.routes, r)
+	return r
 }
 
 // Temporary way for serving static files
