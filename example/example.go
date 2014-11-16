@@ -5,6 +5,7 @@ import (
 	"net/http"
 
 	"github.com/squiidz/fur"
+	"github.com/squiidz/fur/middle"
 	"github.com/squiidz/fur/context"
 )
 
@@ -13,7 +14,8 @@ func main() {
 	s := fur.NewServer("localhost", ":8080", false)
 
 	// Set some default middleware for all Route
-	s.Stack(MiddleLog)
+	// Use Mutate() to transform a handler into a Middleware
+	s.Stack(MiddleLog, middle.Mutate(NonValid))
 
 	// Add a new routes and add some middleware for this one only
 	// You can force a HTTP method (.Get(), .Post(), .Put(), .Delete())
@@ -53,4 +55,9 @@ func MiddleRedirect(next http.Handler) http.Handler {
 			next.ServeHTTP(rw, req)
 		}
 	})
+}
+
+// A middleware without the valid signature
+func NonValid(rw http.ResponseWriter, req *http.Request) {
+	log.Printf("%s", req.RequestURI)
 }
