@@ -13,7 +13,7 @@ import (
 
 type Route struct {
 	Path    string
-	Handler http.Handler
+	handler http.Handler
 	Method  string
 }
 
@@ -56,12 +56,12 @@ func (r Route) ServeHTTP(rw http.ResponseWriter, req *http.Request) {
 	if r.Method != "" {
 		//correct := methodValid(req.Method, r.Method)
 		if req.Method == r.Method {
-			r.Handler.ServeHTTP(rw, req)
+			r.handler.ServeHTTP(rw, req)
 		} else {
 			rw.WriteHeader(http.StatusBadRequest)
 		}
 	} else {
-		r.Handler.ServeHTTP(rw, req)
+		r.handler.ServeHTTP(rw, req)
 	}
 }
 

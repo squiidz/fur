@@ -22,8 +22,8 @@ type Server struct {
 	Host   string
 	Port   string
 	Log    bool
-	Mux    *http.ServeMux
-	Routes []*Route
+	mux    *http.ServeMux
+	routes []*Route
 }
 
 type MiddleWare func(http.Handler) http.Handler
@@ -56,15 +56,15 @@ func (s *Server) Stack(middles ...MiddleWare) {
 // Log the request if the log was initiated as true in NewServer.
 func (s *Server) Start() {
 	fmt.Printf("[+] Server Running on %s ... \n", s.Port)
-	if s.Routes != nil {
-		for _, r := range s.Routes {
-			s.Mux.Handle(r.Path, r)
+	if s.routes != nil {
+		for _, r := range s.routes {
+			s.mux.Handle(r.Path, r)
 		}
 	}
 	if s.Log {
-		http.ListenAndServe(s.Host+s.Port, s.logger(s.Mux))
+		http.ListenAndServe(s.Host+s.Port, s.logger(s.mux))
 	}
-	http.ListenAndServe(s.Host+s.Port, s.Mux)
+	http.ListenAndServe(s.Host+s.Port, s.mux)
 }
 
 // Add function with the right sigature to the Server Mux
@@ -84,13 +84,13 @@ func (s *Server) AddRoute(path string, f func(rw http.ResponseWriter, req *http.
 	}
 
 	r := Route{path, stack, ""}
-	s.Routes = append(s.Routes, &r)
+	s.routes = append(s.routes, &r)
 	return &r
 }
 
 // Temporary way for serving static files
 func (s *Server) AddStatic(path string, dir string) {
-	s.Mux.Handle(path, http.StripPrefix(path, http.FileServer(http.Dir(dir))))
+	s.mux.Handle(path, http.StripPrefix(path, http.FileServer(http.Dir(dir))))
 }
 
 // Log request to the Server.

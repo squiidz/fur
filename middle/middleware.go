@@ -13,6 +13,18 @@ import (
 	"runtime/debug"
 )
 
+type Muta func(rw http.ResponseWriter, req *http.Request)
+
+// transform Normal handler into middleware
+func Mutate(m Muta) func(http.Handler) http.Handler {
+	return func(next http.Handler) http.Handler {
+		return http.HandlerFunc(func(rw http.ResponseWriter, req *http.Request) {
+			m(rw, req)
+			next.ServeHTTP(rw, req)
+		})
+	}
+}
+
 // Very simple Console Logger
 func SimpleLog(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(rw http.ResponseWriter, req *http.Request) {
@@ -34,16 +46,4 @@ func Recovery(next http.Handler) http.Handler {
 		}()
 		next.ServeHTTP(rw, req)
 	})
-}
-
-// transform Normal handler into middleware
-type Muta func(rw http.ResponseWriter, req *http.Request)
-
-func Mutate(m Muta) func(http.Handler) http.Handler {
-	return func(next http.Handler) http.Handler {
-		return http.HandlerFunc(func(rw http.ResponseWriter, req *http.Request) {
-			m(rw, req)
-			next.ServeHTTP(rw, req)
-		})
-	}
 }
