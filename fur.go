@@ -55,7 +55,7 @@ func (s *Server) Stack(middles ...MiddleWare) {
 // Start Listening on host and port of the Server.
 // Log the request if the log was initiated as true in NewServer.
 func (s *Server) Start() {
-	fmt.Printf("[+] Server Running on %s ... \n", s.Port)
+	fmt.Printf("[+] Server listening on: %s\n", s.Port[1:])
 	if s.routes != nil {
 		for _, r := range s.routes {
 			s.mux.Handle(r.Path, r)
@@ -91,6 +91,10 @@ func (s *Server) AddRoute(path string, f func(rw http.ResponseWriter, req *http.
 // Temporary way for serving static files
 func (s *Server) AddStatic(path string, dir string) {
 	s.mux.Handle(path, http.StripPrefix(path, http.FileServer(http.Dir(dir))))
+}
+
+func (s *Server) NotFound(f func(rw http.ResponseWriter, req *http.Request)) http.Handler {
+	return http.HandlerFunc(f)
 }
 
 // Log request to the Server.
