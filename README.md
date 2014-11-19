@@ -70,7 +70,7 @@ Every function that has the signature ` func (s *fur.Server) ` can be passed as 
 - Shortway static files serving [DONE]
 - Add Global Middleware [DONE]
 - Force HTTP method on Route [DONE]
-- Add Multiple HTTP Method on one Route
+- Refactoring
 
 ## Contributing
 
