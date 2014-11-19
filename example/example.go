@@ -5,8 +5,8 @@ import (
 	"net/http"
 
 	"github.com/squiidz/fur"
-	"github.com/squiidz/fur/middle"
 	"github.com/squiidz/fur/context"
+	"github.com/squiidz/fur/middle"
 )
 
 func main() {
@@ -22,7 +22,7 @@ func main() {
 	s.AddRoute("/nuts", DefaultHandler).Get()
 	s.AddRoute("/", DefaultHandler, MiddleRedirect)
 	s.AddStatic("/public/", "my/assets/folder/")
-	
+
 	// Start the server
 	s.Start()
 }
@@ -31,8 +31,8 @@ func main() {
 func DefaultHandler(rw http.ResponseWriter, req *http.Request) {
 	// Short Retrive Context way
 	value := context.Find(req).Get("MyKey")
-	
-	rw.Write([]byte(value.(string))
+
+	rw.Write([]byte(value.(string)))
 }
 
 // Middleware Logger
