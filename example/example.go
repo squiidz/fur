@@ -4,14 +4,19 @@ import (
 	"log"
 	"net/http"
 
+	"github.com/squiidz/bone"
 	"github.com/squiidz/fur"
 	"github.com/squiidz/fur/context"
 	"github.com/squiidz/fur/middle"
 )
 
 func main() {
+	bmux := bone.NewMux()
+	bmux.SetNotFound(http.HandlerFunc(func(rw http.ResponseWriter, req *http.Request) {
+		rw.Write([]byte("Wrong Page ..."))
+	}))
 	// Create a NewServer
-	s := fur.NewServer("localhost", ":8080", false)
+	s := fur.NewServer("localhost", ":8080", bmux)
 
 	// Set some default middleware for all Route
 	// Use Mutate() to transform a handler into a Middleware
@@ -20,7 +25,7 @@ func main() {
 	// Add a new routes and add some middleware for this one only
 	// You can force a HTTP method (.Get(), .Post(), .Put(), .Delete())
 	s.AddRoute("/nuts", DefaultHandler).Get()
-	s.AddRoute("/", DefaultHandler, MiddleRedirect)
+	//s.AddRoute("/", DefaultHandler, MiddleRedirect)
 	s.AddStatic("/public/", "my/assets/folder/")
 
 	// Start the server

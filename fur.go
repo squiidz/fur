@@ -9,7 +9,6 @@ package fur
 
 import (
 	"fmt"
-	"log"
 	"net/http"
 )
 
@@ -17,12 +16,16 @@ var (
 	origin Origin
 )
 
+type Plex interface {
+	Handle(string, http.Handler)
+	ServeHTTP(http.ResponseWriter, *http.Request)
+}
+
 // Simple Server structure for a web server.
 type Server struct {
 	Host   string
 	Port   string
-	Log    bool
-	mux    *http.ServeMux
+	mux    Plex
 	routes []*Route
 }
 
@@ -33,10 +36,24 @@ type Origin []MiddleWare
 // Create a NewServer instance with the given value.
 // Host: "localhost"
 // Port: ":8080"
-// Log: true/false
+// mux: Any Type which implement Plex (http.NewServeMux(), bone.NewMux() etc..)
 // Options: functions to run on the server instance who's gonna be return.
-func NewServer(host string, port string, log bool, options ...func(s *Server)) *Server {
-	svr := Server{host, port, log, http.NewServeMux(), []*Route{}}
+func NewServer(host string, port string, p Plex, options ...func(s *Server)) *Server {
+	svr := Server{host, port, p, []*Route{}}
+	if options != nil {
+		for _, option := range options {
+			option(&svr)
+		}
+	}
+	return &svr
+}
+
+// Create a NewServer instance with the default http.NewServeMux().
+// Host: "localhost"
+// Port: ":8080"
+// Options: functions to run on the server instance who's gonna be return.
+func NewServerMux(host string, port string, options ...func(s *Server)) *Server {
+	svr := Server{host, port, http.NewServeMux(), []*Route{}}
 	if options != nil {
 		for _, option := range options {
 			option(&svr)
@@ -60,9 +77,6 @@ func (s *Server) Start() {
 		for _, r := range s.routes {
 			s.mux.Handle(r.Path, r)
 		}
-	}
-	if s.Log {
-		http.ListenAndServe(s.Host+s.Port, s.logger(s.mux))
 	}
 	http.ListenAndServe(s.Host+s.Port, s.mux)
 }
@@ -95,14 +109,6 @@ func (s *Server) AddStatic(path string, dir string) {
 
 func (s *Server) NotFound(f func(rw http.ResponseWriter, req *http.Request)) http.Handler {
 	return http.HandlerFunc(f)
-}
-
-// Log request to the Server.
-func (s *Server) logger(mux http.Handler) http.Handler {
-	return http.HandlerFunc(func(rw http.ResponseWriter, req *http.Request) {
-		log.Printf("%s %s %s", req.RemoteAddr, req.Method, req.URL)
-		mux.ServeHTTP(rw, req)
-	})
 }
 
 // Only Wrap the middleware on the provided http.Handler

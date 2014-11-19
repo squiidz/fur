@@ -4,9 +4,9 @@ fur
 ## What is fur ?
 
 fur is just a simple web server api, to make things less repetitive.
-No revolution of any kind in this package, just a simple way to build your 
+No revolution of any kind in this package, just a simple way to build your
 Web application basics. fur isn't trying to be a framework at all!
-It is more of a toolkit (e.g [Gorilla](https://github.com/gorilla/mux)). 
+It is more of a toolkit (e.g [Gorilla](https://github.com/gorilla/mux)).
 
 ## Features
 
@@ -20,19 +20,27 @@ It is more of a toolkit (e.g [Gorilla](https://github.com/gorilla/mux)).
 
 ![alt tag](http://upload.wikimedia.org/wikipedia/commons/8/8c/Marmota.jpg)
 
+## Changes
+
+- Remove the log argument from NewServer(), you can use your own logger or the simple one in middle.Logger.
+
+- Now you can provide your own Multiplexer, you juste need to implement the Plex interface.
+	If you want to use the default` http.NewServeMux() `, you can use ` fur.NewServerMux() `instead of ` fur.NewServer() `.
+
 ## Example
 ```go
 package main
-	
+
 import "github.com/squiidz/fur"
-	
+
 func main() {
-	server := fur.NewServer("localhost", ":8080", true, option1, option2)
+	// You can use ` fur.NewServerMux() ` if you want the default http.NewServeMux().
+	server := fur.NewServer("localhost", ":8080", yourMux, option1, option2)
 
 	server.Stack(GlobalMiddleWare)
 
 	server.AddStatic("/public/", "../public")
-	
+
 	server.AddRoute("/home", HomeHandler, Middleware1, Middleware2)
 	server.AddRoute("/", DefaultHandler, MiddleWare3).Get()
 	server.AddRoute("/data", DataHandler).Post()
@@ -53,13 +61,13 @@ Every function that has the signature ` func (s *fur.Server) ` can be passed as 
 - Create a New Context with ``` cont := context.NewContext(req) ```
 - Set some Key/Value ``` cont.Set("key", "value") ```
 - Find the already created context ``` cont := context.FindContext(req) ```
-- Retrive the key ``` cont.Get("key") ``` 
+- Retrive the key ``` cont.Get("key") ```
 
 - Check the example folder if you want to see it in action.
 
 ## Next features
 - Context Variables [75%]
-- Shortway static files serving [DONE] 
+- Shortway static files serving [DONE]
 - Add Global Middleware [DONE]
 - Force HTTP method on Route [DONE]
 - Add Multiple HTTP Method on one Route
