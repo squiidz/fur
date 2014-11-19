@@ -36,15 +36,18 @@ import "github.com/squiidz/fur"
 func main() {
 	// You can use ` fur.NewServerMux() ` if you want the default http.ServeMux.
 	server := fur.NewServer("localhost", ":8080", yourMux, option1, option2)
-
+	// Set Global Middleware
 	server.Stack(GlobalMiddleWare)
 
+	// Serve Static files
 	server.AddStatic("/public/", "../public")
 
+	// Add multiple routes with chaining middleware and http Method
 	server.AddRoute("/home", HomeHandler, Middleware1, Middleware2)
 	server.AddRoute("/", DefaultHandler, MiddleWare3).Get()
 	server.AddRoute("/data", DataHandler).Post()
 
+	// Start Listening
 	server.Start()
 }
 ```
