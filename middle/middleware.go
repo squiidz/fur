@@ -28,7 +28,7 @@ func Mutate(h handler) func(http.Handler) http.Handler {
 // Very simple Console Logger
 func Logger(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(rw http.ResponseWriter, req *http.Request) {
-		log.Printf("[%s] %s %s", req.Method, req.RequestURI, req.RemoteAddr)
+		log.Printf("\x1b[42m[%s]\x1b[0m %s %s", req.Method, req.RequestURI, req.RemoteAddr)
 		next.ServeHTTP(rw, req)
 	})
 }
