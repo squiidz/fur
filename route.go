@@ -37,6 +37,18 @@ func (r *Route) Delete() {
 	r.Method = "DELETE"
 }
 
+func (r *Route) Head() {
+	r.Method = "HEAD"
+}
+
+func (r *Route) Patch() {
+	r.Method = "PATCH"
+}
+
+func (r *Route) Options() {
+	r.Method = "OPTIONS"
+}
+
 func (r Route) ServeHTTP(rw http.ResponseWriter, req *http.Request) {
 
 	if r.Method != "" {
