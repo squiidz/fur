@@ -22,7 +22,7 @@ It is more of a toolkit (e.g [Gorilla](https://github.com/gorilla/mux)).
 
 ## Changes
 
-- Remove the log argument from ` fur.NewServer() `, you can use your own logger or the simple one in middle.Logger.
+- Remove the log argument from ` fur.NewServer() `, you can use your own logger or if you need a simple one you can use ` middle.Logger() `. You just have to use it in ` fur.Stack() `, if you want to use it on every handler.
 
 - Now you can provide your own Multiplexer, you juste need to implement the Plex interface.
 	If you want to use the default` http.ServeMux `, you can use ` fur.NewServerMux() `instead of ` fur.NewServer() `.
