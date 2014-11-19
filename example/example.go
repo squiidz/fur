@@ -4,23 +4,18 @@ import (
 	"log"
 	"net/http"
 
-	"github.com/squiidz/bone"
 	"github.com/squiidz/fur"
 	"github.com/squiidz/fur/context"
 	"github.com/squiidz/fur/middle"
 )
 
 func main() {
-	bmux := bone.NewMux()
-	bmux.SetNotFound(http.HandlerFunc(func(rw http.ResponseWriter, req *http.Request) {
-		rw.Write([]byte("Wrong Page ..."))
-	}))
 	// Create a NewServer
-	s := fur.NewServer("localhost", ":8080", bmux)
+	s := fur.NewServerMux("localhost", ":8000")
 
 	// Set some default middleware for all Route
 	// Use Mutate() to transform a handler into a Middleware
-	s.Stack(MiddleLog, middle.Mutate(NonValid))
+	s.Stack(middle.Logger, CtxMiddle, middle.Mutate(NonValid), middle.Recovery)
 
 	// Add a new routes and add some middleware for this one only
 	// You can force a HTTP method (.Get(), .Post(), .Put(), .Delete())
@@ -41,12 +36,11 @@ func DefaultHandler(rw http.ResponseWriter, req *http.Request) {
 }
 
 // Middleware Logger
-func MiddleLog(next http.Handler) http.Handler {
+func CtxMiddle(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(rw http.ResponseWriter, req *http.Request) {
 		// Short Context way
 		context.NewContext(req).Set("MyKey", "MyValue")
 
-		log.Printf("[%s] %s %s", req.Method, req.RequestURI, req.RemoteAddr)
 		next.ServeHTTP(rw, req)
 	})
 }
