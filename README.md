@@ -25,7 +25,7 @@ It is more of a toolkit (e.g [Gorilla](https://github.com/gorilla/mux)).
 - Remove the log argument from NewServer(), you can use your own logger or the simple one in middle.Logger.
 
 - Now you can provide your own Multiplexer, you juste need to implement the Plex interface.
-	If you want to use the default` http.NewServeMux() `, you can use ` fur.NewServerMux() `instead of ` fur.NewServer() `.
+	If you want to use the default` http.ServeMux `, you can use ` fur.NewServerMux() `instead of ` fur.NewServer() `.
 
 ## Example
 ```go
@@ -34,7 +34,7 @@ package main
 import "github.com/squiidz/fur"
 
 func main() {
-	// You can use ` fur.NewServerMux() ` if you want the default http.NewServeMux().
+	// You can use ` fur.NewServerMux() ` if you want the default http.ServeMux.
 	server := fur.NewServer("localhost", ":8080", yourMux, option1, option2)
 
 	server.Stack(GlobalMiddleWare)
