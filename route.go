@@ -55,7 +55,7 @@ func (r Route) ServeHTTP(rw http.ResponseWriter, req *http.Request) {
 		if req.Method == r.Method {
 			r.handler.ServeHTTP(rw, req)
 		} else {
-			rw.WriteHeader(http.StatusBadRequest)
+			http.NotFound(rw, req)
 		}
 	} else {
 		r.handler.ServeHTTP(rw, req)
