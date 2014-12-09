@@ -15,7 +15,7 @@ func main() {
 
 	// Set some default middleware for all Route
 	// Use Mutate() to transform a handler into a Middleware
-	s.Stack(middle.Logger, CtxMiddle, middle.Mutate(NonValid), middle.Recovery)
+	s.Stack(middle.Logger, CtxMiddle, fur.Mutate(NonValid), middle.Recovery)
 
 	// Add a new routes and add some middleware for this one only
 	// You can force a HTTP method (.Get(), .Post(), .Put(), .Delete())
