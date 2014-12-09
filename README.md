@@ -54,7 +54,7 @@ func main() {
 
 ## Middlewares and Options
 Every function that has the signature ` func (next http.Handler) http.Handler ` can be passed as a MiddleWare.
-Or pass a ` func (rw http.ReponseWriter, req *http.Request) ` to ` middle.Mutate() `.
+Or pass a ` func (rw http.ReponseWriter, req *http.Request) ` to ` fur.Mutate() `.
 
 Every function that has the signature ` func (s *fur.Server) ` can be passed as a Option.
 
