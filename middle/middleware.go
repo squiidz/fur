@@ -10,11 +10,22 @@ package middle
 import (
 	"log"
 	"net/http"
+	"os"
 	"runtime"
 	"runtime/debug"
 )
 
 type handler func(rw http.ResponseWriter, req *http.Request)
+
+const (
+	DELETE = "41m"
+	GET    = "42m"
+	POST   = "44m"
+)
+
+var (
+	LOG = log.New(os.Stdout, "<=FUR=> ", 2)
+)
 
 // Very simple Console Logger
 func Logger(next http.Handler) http.Handler {
@@ -23,25 +34,30 @@ func Logger(next http.Handler) http.Handler {
 		switch req.Method {
 		case "GET":
 			if p != "windows" {
-				log.Printf("\x1b[42m[%s]\x1b[0m %s %s", req.Method, req.RemoteAddr, req.RequestURI)
+				output(GET, req)
 			} else {
-				log.Printf("[%s] %s %s", req.Method, req.RemoteAddr, req.RequestURI)
+				LOG.Printf("[%s] %s %s", req.Method, req.RemoteAddr, req.RequestURI)
 			}
 		case "POST":
 			if p != "windows" {
-				log.Printf("\x1b[44m[%s]\x1b[0m %s %s", req.Method, req.RemoteAddr, req.RequestURI)
+				output(POST, req)
 			} else {
-				log.Printf("[%s] %s %s", req.Method, req.RemoteAddr, req.RequestURI)
+				LOG.Printf("[%s] %s %s", req.Method, req.RemoteAddr, req.RequestURI)
 			}
 		case "DELETE":
 			if p != "windows" {
-				log.Printf("\x1b[41m[%s]\x1b[0m %s %s", req.Method, req.RemoteAddr, req.RequestURI)
+				output(DELETE, req)
 			} else {
-				log.Printf("[%s] %s %s", req.Method, req.RemoteAddr, req.RequestURI)
+				LOG.Printf("[%s] %s %s", req.Method, req.RemoteAddr, req.RequestURI)
 			}
 		}
 		next.ServeHTTP(rw, req)
 	})
+}
+
+// Set the color
+func output(meth string, req *http.Request) {
+	LOG.Printf("\x1b[%s[%s]\x1b[0m %s %s", meth, req.Method, req.RemoteAddr, req.RequestURI)
 }
 
 // Recovery Middleware
