@@ -10,6 +10,8 @@ package fur
 import (
 	"fmt"
 	"net/http"
+
+	"github.com/squiidz/bone"
 )
 
 type Plex interface {
@@ -23,7 +25,7 @@ type Server struct {
 	Port   string
 	mux    Plex
 	global Origin
-	routes []*Route
+	routes []*bone.Route
 }
 
 type MiddleWare func(http.Handler) http.Handler
@@ -36,7 +38,7 @@ type Origin []MiddleWare
 // mux: Any Type which implement Plex (http.NewServeMux(), bone.NewMux() etc..)
 // Options: functions to run on the server instance who's gonna be return.
 func NewServer(host string, port string, p Plex, options ...func(s *Server)) *Server {
-	svr := Server{host, port, p, nil, []*Route{}}
+	svr := Server{host, port, p, nil, []*bone.Route{}}
 	if options != nil {
 		for _, option := range options {
 			option(&svr)
@@ -50,7 +52,7 @@ func NewServer(host string, port string, p Plex, options ...func(s *Server)) *Se
 // Port: ":8080"
 // Options: functions to run on the server instance who's gonna be return.
 func NewServerMux(host string, port string, options ...func(s *Server)) *Server {
-	svr := Server{host, port, NewMux(), nil, []*Route{}}
+	svr := Server{host, port, bone.NewMux(), nil, []*bone.Route{}}
 	if options != nil {
 		for _, option := range options {
 			option(&svr)
@@ -80,7 +82,7 @@ func (s *Server) Start() {
 
 // Add function with the right sigature to the Server Mux
 // and chain the provided middlewares on it.
-func (s *Server) AddRoute(path string, f func(rw http.ResponseWriter, req *http.Request), middles ...MiddleWare) *Route {
+func (s *Server) AddRoute(path string, f func(rw http.ResponseWriter, req *http.Request), middles ...MiddleWare) *bone.Route {
 	var stack http.Handler
 	var global = s.global
 
@@ -94,14 +96,15 @@ func (s *Server) AddRoute(path string, f func(rw http.ResponseWriter, req *http.
 		stack = http.HandlerFunc(f)
 	}
 
-	r := NewRoute(path, stack)
+	r := bone.NewRoute(path, stack)
 	s.routes = append(s.routes, r)
 	return r
 }
 
 // Temporary way for serving static files
 func (s *Server) AddStatic(path string, dir string) {
-	s.mux.Handle(path, http.StripPrefix(path, http.FileServer(http.Dir(dir))))
+	fileHandler := http.StripPrefix(path, http.FileServer(http.Dir(dir)))
+	s.mux.Handle(path, fileHandler)
 }
 
 // Only Wrap the middleware on the provided http.Handler
