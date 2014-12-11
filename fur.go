@@ -52,7 +52,7 @@ func NewServer(host string, port string, p Plex, options ...func(s *Server)) *Se
 // Port: ":8080"
 // Options: functions to run on the server instance who's gonna be return.
 func NewServerMux(host string, port string, options ...func(s *Server)) *Server {
-	svr := Server{host, port, bone.NewMux(), nil, []*bone.Route{}}
+	svr := Server{host, port, bone.New(), nil, []*bone.Route{}}
 	if options != nil {
 		for _, option := range options {
 			option(&svr)

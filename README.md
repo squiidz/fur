@@ -15,7 +15,8 @@ It is more of a toolkit (e.g [Gorilla](https://github.com/gorilla/mux)).
 - Remove the log argument from ` fur.NewServer() `, you can use your own logger or if you need a simple one you can use ` middle.Logger() `. You just have to use it in ` fur.Stack() `, if you want to use it on every handler.
 
 - Now you can provide your own Multiplexer, you just need to implement the simple Plex interface.
-If you want to use ` fur.Mux ` which support url variables, you can use ` fur.NewServerMux() `instead of ` fur.NewServer() `.
+If you want to use [bone](https://github.com/squiidz/bone) which support url variables, you can use ` fur.NewServerMux() `instead of
+` fur.NewServer() `.
 
 ## Features
 
@@ -36,7 +37,7 @@ package main
 import "github.com/squiidz/fur"
 
 func main() {
-	// You can use ` fur.NewServerMux() ` if you want the default ` fur.Mux `.
+	// You can use ` fur.NewServerMux() ` if you want the default ` bone.Mux `.
 	server := fur.NewServer("localhost", ":8080", yourMux, option1, option2)
 	// Set Global Middleware
 	server.Stack(GlobalMiddleWare)
