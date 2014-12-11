@@ -36,7 +36,7 @@ package main
 import "github.com/squiidz/fur"
 
 func main() {
-	// You can use ` fur.NewServerMux() ` if you want the default http.ServeMux.
+	// You can use ` fur.NewServerMux() ` if you want the default ` fur.Mux `.
 	server := fur.NewServer("localhost", ":8080", yourMux, option1, option2)
 	// Set Global Middleware
 	server.Stack(GlobalMiddleWare)
@@ -52,6 +52,13 @@ func main() {
 	// Start Listening
 	server.Start()
 }
+
+// Get the :id value
+func GetUrlVar(rw http.ResponseWriter, req *http.Request) {
+	value := req.URL.Query().Get("id")
+	rw.Write([]byte(value))
+}
+
 ```
 
 ## Middlewares and Options
