@@ -11,7 +11,7 @@ import (
 
 func main() {
 	// Create a NewServer
-	s := fur.NewServerMux("localhost", ":8000")
+	s := fur.NewServerMux("localhost", ":8080")
 
 	// Set some default middleware for all Route
 	// Use Mutate() to transform a handler into a Middleware
@@ -20,8 +20,11 @@ func main() {
 	// Add a new routes and add some middleware for this one only
 	// You can force a HTTP method (.Get(), .Post(), .Put(), .Delete())
 	s.AddRoute("/nuts", DefaultHandler).Get()
-	//s.AddRoute("/", DefaultHandler, MiddleRedirect)
-	s.AddStatic("/public/", "my/assets/folder/")
+
+	// AddRoute support Arguments
+	s.AddRoute("/nuts/:var", VarHandler).Get()
+
+	s.AddStatic("/public/", "../public")
 
 	// Start the server
 	s.Start()
@@ -32,7 +35,11 @@ func DefaultHandler(rw http.ResponseWriter, req *http.Request) {
 	// Short Retrive Context way
 	value := context.Find(req).Get("MyKey")
 
-	rw.Write([]byte(value.(string)))
+	rw.Write([]byte(value))
+}
+
+func VarHandler(rw http.ResponseWriter, req *http.Request) {
+	rw.Write([]byte(req.URL.Query().Get("var")))
 }
 
 // Middleware Logger

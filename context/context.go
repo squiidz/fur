@@ -15,7 +15,7 @@ import (
 // Context struct, req = the *http.Request provided with the NewContext func
 type Context struct {
 	req  *http.Request
-	vars map[interface{}]interface{}
+	vars map[string]string
 }
 
 var (
@@ -25,7 +25,7 @@ var (
 
 // Create a new context struct, with vars map
 func NewContext(req *http.Request) *Context {
-	memo[req] = Context{req, make(map[interface{}]interface{})}
+	memo[req] = Context{req, make(map[string]string)}
 	c := memo[req]
 	return &c
 }
@@ -41,24 +41,24 @@ func Find(req *http.Request) *Context {
 }
 
 // Set a new key value pair in the context.Vars
-func (c *Context) Set(key, value interface{}) {
+func (c *Context) Set(key, value string) {
 	mutex.Lock()
 	c.vars[key] = value
 	mutex.Unlock()
 }
 
 // Get a key value from a context
-func (c *Context) Get(key interface{}) interface{} {
+func (c *Context) Get(key string) string {
 	return c.vars[key]
 }
 
 // Get the map of data of the context
-func (c *Context) GetAll() map[interface{}]interface{} {
+func (c *Context) GetAll() map[string]string {
 	return c.vars
 }
 
 // Delete a key
-func (c *Context) Delete(key interface{}) {
+func (c *Context) Delete(key string) {
 	delete(c.vars, key)
 }
 

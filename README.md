@@ -10,10 +10,12 @@ It is more of a toolkit (e.g [Gorilla](https://github.com/gorilla/mux)).
 
 ## Changes
 
+- Support URL Variables ` fur.AddRoute("/home/:id", Handler) `
+
 - Remove the log argument from ` fur.NewServer() `, you can use your own logger or if you need a simple one you can use ` middle.Logger() `. You just have to use it in ` fur.Stack() `, if you want to use it on every handler.
 
-- Now you can provide your own Multiplexer, you juste need to implement the Plex interface.
-	If you want to use the default` http.ServeMux `, you can use ` fur.NewServerMux() `instead of ` fur.NewServer() `.
+- Now you can provide your own Multiplexer, you just need to implement the simple Plex interface.
+If you want to use ` fur.Mux ` which support url variables, you can use ` fur.NewServerMux() `instead of ` fur.NewServer() `.
 
 ## Features
 
@@ -42,9 +44,9 @@ func main() {
 	// Serve Static files
 	server.AddStatic("/public/", "../public")
 
-	// Add multiple routes with chaining middleware and http Method
+	// Add multiple routes with chaining middleware, http Method and url variables
 	server.AddRoute("/home", HomeHandler, Middleware1, Middleware2)
-	server.AddRoute("/", DefaultHandler, MiddleWare3).Get()
+	server.AddRoute("/home/:id", DefaultHandler, MiddleWare3).Get()
 	server.AddRoute("/data", DataHandler).Post()
 
 	// Start Listening
@@ -69,7 +71,7 @@ Every function that has the signature ` func (s *fur.Server) ` can be passed as 
 - Check the example folder if you want to see it in action.
 
 ## Next features
-- Context Variables [75%]
+- Context Variables [DONE]
 - Shortway static files serving [DONE]
 - Add Global Middleware [DONE]
 - Force HTTP method on Route [DONE]

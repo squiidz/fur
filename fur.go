@@ -12,10 +12,6 @@ import (
 	"net/http"
 )
 
-var (
-	origin Origin
-)
-
 type Plex interface {
 	Handle(string, http.Handler)
 	ServeHTTP(http.ResponseWriter, *http.Request)
@@ -26,6 +22,7 @@ type Server struct {
 	Host   string
 	Port   string
 	mux    Plex
+	global Origin
 	routes []*Route
 }
 
@@ -39,7 +36,7 @@ type Origin []MiddleWare
 // mux: Any Type which implement Plex (http.NewServeMux(), bone.NewMux() etc..)
 // Options: functions to run on the server instance who's gonna be return.
 func NewServer(host string, port string, p Plex, options ...func(s *Server)) *Server {
-	svr := Server{host, port, p, []*Route{}}
+	svr := Server{host, port, p, nil, []*Route{}}
 	if options != nil {
 		for _, option := range options {
 			option(&svr)
@@ -53,7 +50,7 @@ func NewServer(host string, port string, p Plex, options ...func(s *Server)) *Se
 // Port: ":8080"
 // Options: functions to run on the server instance who's gonna be return.
 func NewServerMux(host string, port string, options ...func(s *Server)) *Server {
-	svr := Server{host, port, http.NewServeMux(), []*Route{}}
+	svr := Server{host, port, NewMux(), nil, []*Route{}}
 	if options != nil {
 		for _, option := range options {
 			option(&svr)
@@ -65,7 +62,7 @@ func NewServerMux(host string, port string, options ...func(s *Server)) *Server 
 // Add Global Middleware to origin
 func (s *Server) Stack(middles ...MiddleWare) {
 	for _, middle := range middles {
-		origin = append(origin, middle)
+		s.global = append(s.global, middle)
 	}
 }
 
@@ -85,19 +82,19 @@ func (s *Server) Start() {
 // and chain the provided middlewares on it.
 func (s *Server) AddRoute(path string, f func(rw http.ResponseWriter, req *http.Request), middles ...MiddleWare) *Route {
 	var stack http.Handler
-	var midStack = origin
+	var global = s.global
 
-	if middles != nil || midStack != nil {
+	if middles != nil || global != nil {
 		for _, mid := range middles {
-			midStack = append(midStack, mid)
+			global = append(global, mid)
 		}
-		stack = midStack[0](http.HandlerFunc(f))
-		stack = wrap(stack, midStack[1:])
+		stack = global[0](http.HandlerFunc(f))
+		stack = wrap(stack, global[1:])
 	} else {
 		stack = http.HandlerFunc(f)
 	}
 
-	r := NewRoute(path, stack, "")
+	r := NewRoute(path, stack)
 	s.routes = append(s.routes, r)
 	return r
 }
@@ -105,10 +102,6 @@ func (s *Server) AddRoute(path string, f func(rw http.ResponseWriter, req *http.
 // Temporary way for serving static files
 func (s *Server) AddStatic(path string, dir string) {
 	s.mux.Handle(path, http.StripPrefix(path, http.FileServer(http.Dir(dir))))
-}
-
-func (s *Server) NotFound(f func(rw http.ResponseWriter, req *http.Request)) http.Handler {
-	return http.HandlerFunc(f)
 }
 
 // Only Wrap the middleware on the provided http.Handler
