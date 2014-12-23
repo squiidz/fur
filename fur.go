@@ -10,8 +10,10 @@ package fur
 import (
 	"fmt"
 	"net/http"
+	//"reflect"
 
 	"github.com/squiidz/bone"
+	"github.com/squiidz/claw"
 )
 
 type Plex interface {
@@ -24,13 +26,9 @@ type Server struct {
 	Host   string
 	Port   string
 	mux    Plex
-	global Origin
+	global *claw.Claw
 	routes []*bone.Route
 }
-
-type MiddleWare func(http.Handler) http.Handler
-
-type Origin []MiddleWare
 
 // Create a NewServer instance with the given value.
 // Host: "localhost"
@@ -38,7 +36,7 @@ type Origin []MiddleWare
 // mux: Any Type which implement Plex (http.NewServeMux(), bone.NewMux() etc..)
 // Options: functions to run on the server instance who's gonna be return.
 func NewServer(host string, port string, p Plex, options ...func(s *Server)) *Server {
-	svr := Server{host, port, p, nil, []*bone.Route{}}
+	svr := Server{host, port, p, claw.New(), []*bone.Route{}}
 	if options != nil {
 		for _, option := range options {
 			option(&svr)
@@ -52,7 +50,7 @@ func NewServer(host string, port string, p Plex, options ...func(s *Server)) *Se
 // Port: ":8080"
 // Options: functions to run on the server instance who's gonna be return.
 func NewServerMux(host string, port string, options ...func(s *Server)) *Server {
-	svr := Server{host, port, bone.New(), nil, []*bone.Route{}}
+	svr := Server{host, port, bone.New(), claw.New(), []*bone.Route{}}
 	if options != nil {
 		for _, option := range options {
 			option(&svr)
@@ -62,10 +60,8 @@ func NewServerMux(host string, port string, options ...func(s *Server)) *Server 
 }
 
 // Add Global Middleware to origin
-func (s *Server) Stack(middles ...MiddleWare) {
-	for _, middle := range middles {
-		s.global = append(s.global, middle)
-	}
+func (s *Server) Stack(middles ...interface{}) {
+	s.global.Wrap(middles)
 }
 
 // Start Listening on host and port of the Server.
@@ -82,18 +78,18 @@ func (s *Server) Start() {
 
 // Add function with the right sigature to the Server Mux
 // and chain the provided middlewares on it.
-func (s *Server) AddRoute(path string, f func(rw http.ResponseWriter, req *http.Request), middles ...MiddleWare) *bone.Route {
+func (s *Server) AddRoute(path string, f func(rw http.ResponseWriter, req *http.Request), middles ...interface{}) *bone.Route {
 	var stack http.Handler
-	var global = s.global
 
-	if middles != nil || global != nil {
-		for _, mid := range middles {
-			global = append(global, mid)
+	if middles != nil {
+		for i, m := range middles {
+			if i == 0 {
+				stack = s.global.Use(f).Add(m)
+			}
+			stack = s.global.Merge(stack).Add(m)
 		}
-		stack = global[0](http.HandlerFunc(f))
-		stack = wrap(stack, global[1:])
 	} else {
-		stack = http.HandlerFunc(f)
+		stack = s.global.Use(f)
 	}
 
 	r := bone.NewRoute(path, stack)
@@ -108,7 +104,7 @@ func (s *Server) AddStatic(path string, dir string) {
 }
 
 // Only Wrap the middleware on the provided http.Handler
-func wrap(stack http.Handler, middles []MiddleWare) http.Handler {
+func wrap(stack http.Handler, middles []claw.MiddleWare) http.Handler {
 	for i := len(middles) - 1; i >= 0; i-- {
 		stack = middles[i](stack)
 	}

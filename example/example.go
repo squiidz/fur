@@ -19,7 +19,7 @@ func main() {
 
 	// Add a new routes and add some middleware for this one only
 	// You can force a HTTP method (.Get(), .Post(), .Put(), .Delete())
-	s.AddRoute("/nuts", DefaultHandler).Get()
+	s.AddRoute("/nuts", DefaultHandler, MiddleRedirect).Get()
 
 	// AddRoute support Arguments
 	s.AddRoute("/nuts/:var", VarHandler).Get()
