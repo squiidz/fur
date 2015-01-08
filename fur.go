@@ -111,3 +111,7 @@ func wrap(stack http.Handler, middles []claw.MiddleWare) http.Handler {
 
 	return stack
 }
+
+func GetValue(req *http.Request, key string) string {
+    return bone.GetValue(req, key)
+}
