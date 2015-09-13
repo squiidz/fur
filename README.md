@@ -64,7 +64,7 @@ func GetUrlVar(rw http.ResponseWriter, req *http.Request) {
 
 ## Middlewares and Options
 Every function that has the signature ` func (next http.Handler) http.Handler ` can be passed as a MiddleWare.
-Or pass a ` func (rw http.ReponseWriter, req *http.Request) ` to ` fur.Mutate() `.
+Or pass a ` func (rw http.ResponseWriter, req *http.Request) ` to ` fur.Mutate() `.
 
 Every function that has the signature ` func (s *fur.Server) ` can be passed as a Option.
 
